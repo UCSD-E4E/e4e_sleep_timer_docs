@@ -1,0 +1,19 @@
+@startuml System Diagram
+[Battery] as batt
+package "Sleep Timer" {
+    [Nucleo G071RB] as stm32
+    [MOSFET] as mosfet
+    [RTC] as rtc
+    interface "External Wakeup" as exti
+    exti -> stm32 : External Interrupt
+    rtc <-> stm32 : Time/Alarm Interrupt
+    stm32 -> mosfet : Control Signal
+}
+[5V DC Regulator] as 5vreg
+[System] as system
+batt --> 5vreg : Battery Voltage
+5vreg --> stm32 : 5V DC
+5vreg -> mosfet : 5V DC
+mosfet --> system : VDD1
+system <-> stm32 : Serial Control
+@enduml

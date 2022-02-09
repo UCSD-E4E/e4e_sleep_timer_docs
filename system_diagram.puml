@@ -17,3 +17,40 @@ batt --> 5vreg : Battery Voltage
 mosfet --> system : VDD1
 system <-> stm32 : Serial Control
 @enduml
+
+@startuml FW Diagram
+class SerialDriver{
+    init()
+    read()
+    write()
+    flush()
+    deinit()
+}
+
+class RTCDriver{ 
+    init()
+    deinit()
+    getTime()
+    setTime()
+    setAlarm()
+    clearAlarm()
+    registerAlarmCallback()
+}
+class PwrCtrlDriver{
+    init()
+    deinit()
+    setState()
+}
+
+class CommandModule{
+    init()
+    deinit()
+    parse()
+    registerCommandCallback()
+}
+class Application{
+    doWakeCommand()
+    doSetTimeCommand()
+    doAlarm()
+}
+@enduml

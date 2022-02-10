@@ -20,37 +20,46 @@ system <-> stm32 : Serial Control
 
 @startuml FW Diagram
 class SerialDriver{
-    init()
-    read()
-    write()
-    flush()
-    deinit()
+    int E4E_HAL_Serial_init(E4E_HAL_SerialDesc*, E4E_HAL_SerialDevice_e, E4E_HAL_SerialConfig*)
+    int E4E_HAL_Serial_read(E4E_HAL_SerialDesc*, void*, size_t count, uint32_t timeout)
+    int E4E_HAL_Serial_write(E4E_HAL_SerialDesc*, const void*, size_t count, uint32_t timeout)
+    int E4E_HAL_Serial_flush(E4E_HAL_SerialDesc*)
+    int E4E_HAL_Serial_deinit(E4E_HAL_SerialDesc*)
 }
 
 class RTCDriver{ 
-    init()
-    deinit()
-    getTime()
-    setTime()
-    setAlarm()
-    clearAlarm()
-    registerAlarmCallback()
+    int E4E_HAL_RTC_init(E4E_HAL_RTCDesc*, E4E_HAL_RTCConfig*)
+    int E4E_HAL_RTC_deinit(E4E_HAL_RTCDesc*)
+    int E4E_HAL_RTC_getTime(E4E_HAL_RTCDesc*, int64_t*)
+    int E4E_HAL_RTC_setTime(E4E_HAL_RTCDesc*, int64_t)
+    int E4E_HAL_RTC_setAlarm(E4E_HAL_RTCDesc*, int64_t)
+    int E4E_HAL_RTC_clearAlarm(E4E_HAL_RTCDesc*)
+    int rE4E_HAL_RTC_egisterAlarmCallback(E4E_HAL_RTCDesc*, int (*)(int64_t, void*))
 }
 class PwrCtrlDriver{
-    init()
-    deinit()
-    setState()
+    int E4E_HAL_PwrCtrl_init(E4E_HAL_PWRCTRLDesc*, E4E_HAL_PWRCTRLDevice_e, E4E_HAL_PWRCTRLConfig*)
+    int E4E_HAL_PwrCtrl_deinit(E4E_HAL_PWRCTRLDesc*)
+    int E4E_HAL_PwrCtrl_setState(E4E_HAL_PWRCTRLDesc*)
 }
 
 class CommandModule{
-    init()
-    deinit()
-    parse()
-    registerCommandCallback()
+    int E4E_ST_Command_init(E4E_ST_CommandDesc*, E4E_ST_CommandConfig*)
+    int E4E_ST_Command_deinit(E4E_ST_CommandDesc*)
+    int E4E_ST_Command_parse(E4E_ST_CommandDesc*, uint8_t)
+    int E4E_ST_Command_registerCommandCallback(E4E_ST_CommandDesc*, E4E_ST_CommandID_e, int (*)(E4E_ST_CommandID_e, void*))
 }
 class Application{
-    doWakeCommand()
-    doSetTimeCommand()
-    doAlarm()
+    E4E_ST_CommandDesc commandModule
+    int E4E_ST_App_init(E4E_ST_AppDesc*, E4E_ST_AppConfig*)
+    int E4E_ST_App_doWakeCommand(E4E_ST_CommandID_e, void*)
+    int E4E_ST_App_doSetTimeCommand(E4E_ST_CommandID_e, void*)
+    int E4E_ST_App_doAlarm(int64_t, void*)
+}
+
+class HAL_System{
+    E4E_HAL_SerialDesc commandSerialDesc
+    E4E_HAL_SerialDesc debugSerialDesc
+    E4E_HAL_RTCDesc rtcDesc
+    E4E_HAL_PWRCTRLDesc system1Desc
 }
 @enduml

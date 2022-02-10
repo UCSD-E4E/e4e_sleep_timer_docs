@@ -62,4 +62,38 @@ class HAL_System{
     E4E_HAL_RTCDesc rtcDesc
     E4E_HAL_PWRCTRLDesc system1Desc
 }
+
+HAL_System *-- SerialDriver
+HAL_System *-- RTCDriver
+HAL_System *-- PwrCtrlDriver
+
+Application *-- CommandModule
+@enduml
+
+@startuml Firmware Architecture
+package "Sleep Timer Application"{
+    [Application] as app
+    [Command Module] as cmd
+}
+package "E4E HAL" {
+    [E4E HAL Serial] as e4e_hal_serial
+    [E4E HAL RTC] as e4e_hal_rtc
+    [E4E HAL Power Control] as e4e_hal_pwrctrl
+}
+package "STM32 HAL" {
+    [STM32 HAL UART] as hal_uart
+    [STM32 HAL RTC] as hal_rtc
+    [STM32 HAL GPIO] as hal_gpio
+}
+
+e4e_hal_serial --> hal_uart
+e4e_hal_rtc --> hal_rtc
+e4e_hal_pwrctrl --> hal_gpio
+
+cmd --> e4e_hal_serial
+app <--> cmd
+app <--> e4e_hal_pwrctrl
+app <--> e4e_hal_rtc
+app --> e4e_hal_serial
+
 @enduml

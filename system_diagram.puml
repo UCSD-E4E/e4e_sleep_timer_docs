@@ -21,8 +21,8 @@ system <-> stm32 : Serial Control
 @startuml FW Diagram
 class SerialDriver{
     int E4E_HAL_Serial_init(E4E_HAL_SerialDesc_t*, E4E_HAL_SerialDevice_e, E4E_HAL_SerialConfig_t*)
-    int E4E_HAL_Serial_read(E4E_HAL_SerialDesc_t*, void*, size_t count, uint32_t timeout)
-    int E4E_HAL_Serial_write(E4E_HAL_SerialDesc_t*, const void*, size_t count, uint32_t timeout)
+    int E4E_HAL_Serial_read(E4E_HAL_SerialDesc_t*, void*, size_t, uint32_t)
+    int E4E_HAL_Serial_write(E4E_HAL_SerialDesc_t*, const void*, size_t, uint32_t)
     int E4E_HAL_Serial_flush(E4E_HAL_SerialDesc_t*)
     int E4E_HAL_Serial_deinit(E4E_HAL_SerialDesc_t*)
 }
@@ -34,7 +34,7 @@ class RTCDriver{
     int E4E_HAL_RTC_setTime(E4E_HAL_RTCDesc_t*, int64_t)
     int E4E_HAL_RTC_setAlarm(E4E_HAL_RTCDesc_t*, int64_t)
     int E4E_HAL_RTC_clearAlarm(E4E_HAL_RTCDesc_t*)
-    int rE4E_HAL_RTC_egisterAlarmCallback(E4E_HAL_RTCDesc_t*, int (*)(int64_t, void*))
+    int E4E_HAL_RTC_registerAlarmCallback(E4E_HAL_RTCDesc_t*, int (*)(int64_t, void*))
 }
 class PwrCtrlDriver{
     int E4E_HAL_PwrCtrl_init(E4E_HAL_PWRCTRLDesc_t*, E4E_HAL_PWRCTRLDevice_e, E4E_HAL_PWRCTRLConfig_t*)
@@ -51,8 +51,8 @@ class CommandModule{
 class Application{
     E4E_ST_CommandDesc_t commandModule
     int E4E_ST_App_init(E4E_ST_AppDesc_t*, E4E_ST_AppConfig_t*)
-    int E4E_ST_App_doWakeCommand(E4E_ST_CommandID_e, void*)
-    int E4E_ST_App_doSetTimeCommand(E4E_ST_CommandID_e, void*)
+    int E4E_ST_App_doWakeCommand(E4E_ST_CommandID_e, void*, void*)
+    int E4E_ST_App_doSetTimeCommand(E4E_ST_CommandID_e, void*, void*)
     int E4E_ST_App_doAlarm(int64_t, void*)
 }
 
@@ -60,7 +60,7 @@ class HAL_System{
     E4E_HAL_SerialDesc_t commandSerialDesc
     E4E_HAL_SerialDesc_t debugSerialDesc
     E4E_HAL_RTCDesc_t rtcDesc
-    E4E_HAL_PWRCTRLDesc_t system1Desc
+    E4E_HAL_PWRCTRLDesc_t onboardComputerDesc
 }
 
 HAL_System *-- SerialDriver
